@@ -150,8 +150,68 @@ namespace HttpPreferHeaderParser.Test
             Assert.Equal("56", preferences[0].Parameters["right-part"]);
         }
 
+
+        [Theory]
+        [InlineData("foo")]
+        [InlineData("FOO")]
+        [InlineData("fOo")]
+        [InlineData("FoO")]
+        public void Test008_PreferenceNameNotCaseSensitive(string headerValue)
+        {
+            var objectUnderTest = new PreferHeaderParser();
+            var preferences = objectUnderTest.Parse(headerValue);
+
+            Assert.NotNull(preferences);
+            Assert.Single(preferences);
+            Assert.Equal("foo", preferences[0].Name);
+            Assert.Equal("true", preferences[0].Value);
+        }
+
+        [Theory]
+        [InlineData("foo=bar", "bar") ]
+        [InlineData("foo=BAR", "BAR")]
+        [InlineData("foo=\"bar\"", "bar")]
+        [InlineData("foo=\"BAR\"", "BAR")]
+        public void Test009_PreferenceValueCaseSensitive(string headerValue, string expectedPreferenceValue)
+        {
+            var objectUnderTest = new PreferHeaderParser();
+            var preferences = objectUnderTest.Parse(headerValue);
+
+            Assert.NotNull(preferences);
+            Assert.Single(preferences);
+            Assert.Equal("foo", preferences[0].Name);
+            Assert.Equal(expectedPreferenceValue, preferences[0].Value);
+        }
+
+        [Theory]
+        [InlineData("has spaces", "hasspaces")]
+        [InlineData("Lenient", "lenient")]
+        public void Test010_LowerCasePreferenceName(string headerValue, string expectedPreferenceName)
+        {
+            var objectUnderTest = new PreferHeaderParser();
+            var preferences = objectUnderTest.Parse(headerValue);
+
+            Assert.NotNull(preferences);
+            Assert.Single(preferences);
+            Assert.Equal(expectedPreferenceName, preferences[0].Name);
+        }
+
         [Fact]
-        public void Test008_EmptyHeader()
+        public void Test011_MixedSymbolsInQuotes()
+        {
+            var objectUnderTest = new PreferHeaderParser();
+            var preferences = objectUnderTest.Parse("foo=\";= ,;=\"");
+
+            Assert.NotNull(preferences);
+            Assert.Single(preferences);
+            Assert.Equal("foo", preferences[0].Name);
+            Assert.Equal(";= ,;=", preferences[0].Value);
+
+        }
+
+
+        [Fact]
+        public void Test012_EmptyHeader()
         {
             var objectUnderTest = new PreferHeaderParser();
             var preferences = objectUnderTest.Parse("");
@@ -160,7 +220,7 @@ namespace HttpPreferHeaderParser.Test
         }
 
         [Fact]
-        public void Test009_EmptyArray()
+        public void Test013_EmptyArray()
         {
             var objectUnderTest = new PreferHeaderParser();
             var preferences = objectUnderTest.Parse(Array.Empty<string>());
@@ -169,7 +229,7 @@ namespace HttpPreferHeaderParser.Test
         }
 
         [Fact]
-        public void Test010_SendNullString()
+        public void Test014_SendNullString()
         {
             var objectUnderTest = new PreferHeaderParser();
             string nullString = null;
@@ -179,7 +239,7 @@ namespace HttpPreferHeaderParser.Test
         }
 
         [Fact]
-        public void Test011_SendNullStringArray()
+        public void Test015_SendNullStringArray()
         {
             var objectUnderTest = new PreferHeaderParser();
             string[] nullStringArray = null;
