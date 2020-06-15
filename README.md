@@ -8,3 +8,41 @@ I ported this code to C\# for a project, I worked on and thought it might be use
 
 ## API
 
+The code has a main class: **`PreferHeaderParser`**, which implements parsing of the `Prefer` HTTP header via the `Parse` method. The method returns an enumerable of `Preference` class.
+
+Usage:
+
+```csharp
+using HttpPreferHeaderParser;
+
+....
+
+var parser = new PreferHeaderParser();
+var preferences = parser.Parse("foo, bar");
+
+/*
+  preferences = [
+      { Name: "foo", Value="true", Parameters={}},
+      { Name: "bar", Value="true", Parameters={}},
+
+  ]
+*/
+
+....
+
+var preferences = parser.parse("return=minimal; foo=\"some parameter\"");
+
+/*
+  preferences = [
+      { Name: "return", Value="minimal",
+        Parameters={
+            "foo" : "some parameter"
+        }
+      },
+  ]
+*/
+
+
+....
+
+```

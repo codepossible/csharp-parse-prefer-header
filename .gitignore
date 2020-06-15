@@ -1,3 +1,7 @@
+# Visual Studio and Visual Studio Code
+.vs/
+.vscode/
+
 # Logs
 logs
 *.log
@@ -68,3 +72,4 @@ env.yml
 
 # Local configuration files
 local.settings.json
+app.settings.json
