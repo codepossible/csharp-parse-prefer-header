@@ -22,8 +22,8 @@ var preferences = parser.Parse("foo, bar");
 
 /*
   preferences = [
-      { Name: "foo", Value="true", Parameters={}},
-      { Name: "bar", Value="true", Parameters={}},
+      { Name: "foo", Value:"true", Parameters:{}},
+      { Name: "bar", Value:"true", Parameters:{}},
 
   ]
 */
@@ -34,8 +34,9 @@ var preferences = parser.parse("return=minimal; foo=\"some parameter\"");
 
 /*
   preferences = [
-      { Name: "return", Value="minimal",
-        Parameters={
+      { Name: "return",
+        Value="minimal",
+        Parameters: {
             "foo" : "some parameter"
         }
       },
