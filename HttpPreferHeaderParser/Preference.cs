@@ -4,10 +4,6 @@ namespace HttpPreferHeaderParser {
      public class Preference {
         public string Name {get; set;}
         public string Value { get; set; }
-        public Dictionary<string, string> Parameters { get; }
-
-        public Preference() {
-            Parameters = new Dictionary<string, string>();
-        }
+        public Dictionary<string, string> Parameters { get; } = new Dictionary<string, string>();
     }
 }

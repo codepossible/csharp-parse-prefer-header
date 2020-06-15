@@ -16,7 +16,7 @@ namespace HttpPreferHeaderParser.Test
         [InlineData("foo; bar=\"\"", 1)]
         [InlineData("respond-async, wait=100, handling=lenient", 3)]
 
-        public void TestHttpPreferHeaderParser(string headerValue, int numberOfPreferences)
+        public void Test001_PreferenceCount(string headerValue, int numberOfPreferences)
         {
             var objectUnderTest = new PreferHeaderParser();
 
@@ -28,7 +28,50 @@ namespace HttpPreferHeaderParser.Test
         }
 
         [Fact]
-        public void TestHttpPreferHeaderParser_IgnoreDuplicatePreferenceValues()
+        public void Test002_MultiPreferenceValueCheck()
+        {
+            var objectUnderTest = new PreferHeaderParser();
+            var preferences = objectUnderTest.Parse("respond-async, wait=100, handling=lenient");
+
+            Assert.NotNull(preferences);
+            Assert.Equal(3, preferences.Count);
+
+            Assert.Equal("respond-async", preferences[0].Name);
+            Assert.Equal("true", preferences[0].Value);
+            Assert.Empty(preferences[0].Parameters);
+
+            Assert.Equal("wait", preferences[1].Name);
+            Assert.Equal("100", preferences[1].Value);
+            Assert.Empty(preferences[1].Parameters);
+
+            Assert.Equal("handling", preferences[2].Name);
+            Assert.Equal("lenient", preferences[2].Value);
+            Assert.Empty(preferences[2].Parameters);
+        }
+
+        [Theory]
+        [InlineData("foo; bar")]
+        [InlineData("foo=\"\"; bar")]
+        [InlineData("foo; bar=\"\"")]
+        public void Test003_MultiPreferenceParameterExpression(string headerValue)
+        {
+            var objectUnderTest = new PreferHeaderParser();
+            var preferences = objectUnderTest.Parse(headerValue);
+
+            Assert.NotNull(preferences);
+            Assert.Single(preferences);
+
+            Assert.Equal("foo", preferences[0].Name);
+            Assert.Equal("true", preferences[0].Value);
+            Assert.Single(preferences[0].Parameters);
+
+            Assert.True(preferences[0].Parameters.ContainsKey("bar"));
+            Assert.Equal("true", preferences[0].Parameters["bar"]);
+        }
+        
+
+        [Fact]
+        public void Test004_IgnoreDuplicatePreferenceValues()
         {
             var objectUnderTest = new PreferHeaderParser();
             var preferences = objectUnderTest.Parse("wait = 100, wait = 200");
@@ -39,7 +82,7 @@ namespace HttpPreferHeaderParser.Test
         }
 
         [Fact]
-        public void TestHttpPreferHeaderParser_ParseListOfHeaders()
+        public void Test005_ParseListOfHeaders()
         {
             var objectUnderTest = new PreferHeaderParser();
 
@@ -49,7 +92,7 @@ namespace HttpPreferHeaderParser.Test
         }
 
         [Fact]
-        public void TestHttpPreferHeaderParser_HandleComplicatedPreferences()
+        public void Test006_HandleComplicatedPreferences()
         {
             var objectUnderTest = new PreferHeaderParser();
             var preferences = objectUnderTest.Parse(new string[]
@@ -93,7 +136,7 @@ namespace HttpPreferHeaderParser.Test
         }
 
         [Fact]
-        public void TestHttpPreferHeaderParser_MultiPartPreference()
+        public void Test007_MultiPartPreference()
         {
             var objectUnderTest = new PreferHeaderParser();
             var preferences = objectUnderTest.Parse("left-part = 47; right-part = 56");
@@ -108,7 +151,7 @@ namespace HttpPreferHeaderParser.Test
         }
 
         [Fact]
-        public void TestHttpPreferHeaderParser_EmptyHeader()
+        public void Test008_EmptyHeader()
         {
             var objectUnderTest = new PreferHeaderParser();
             var preferences = objectUnderTest.Parse("");
@@ -117,7 +160,7 @@ namespace HttpPreferHeaderParser.Test
         }
 
         [Fact]
-        public void TestHttpPreferHeaderParser_EmptyArray()
+        public void Test009_EmptyArray()
         {
             var objectUnderTest = new PreferHeaderParser();
             var preferences = objectUnderTest.Parse(Array.Empty<string>());
@@ -126,7 +169,7 @@ namespace HttpPreferHeaderParser.Test
         }
 
         [Fact]
-        public void TestHttpPreferHeaderParser_SendNullString()
+        public void Test010_SendNullString()
         {
             var objectUnderTest = new PreferHeaderParser();
             string nullString = null;
@@ -136,7 +179,7 @@ namespace HttpPreferHeaderParser.Test
         }
 
         [Fact]
-        public void TestHttpPreferHeaderParser_SendNullStringArray()
+        public void Test011_SendNullStringArray()
         {
             var objectUnderTest = new PreferHeaderParser();
             string[] nullStringArray = null;
