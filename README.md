@@ -85,3 +85,9 @@ var preferences = parser.parse("return=minimal; foo=\"some parameter\"");
 
 - None
   
+## Feedback and Contributions
+
+- Love to hear, if you were able to use this in your projects.
+- All feedback about the code and documentation are welcome.
+- Please create issues in GitHub to address them.
+- Contributions are welcome as well.
