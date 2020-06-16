@@ -1,7 +1,29 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netstandard2.0</TargetFramework>
+    <Authors>Shashank Banerjea (@codepossible)</Authors>
+    <Product />
+    <Description>HTTP Prefer header parser in C#. RFC-7240 (https://tools.ietf.org/html/rfc7240)
+Port of code to C# from NodeJS provide by Patrick Paskaris  (https://github.com/ppaskaris/node-parse-prefer-header). 
+
+The C# code is hosted GitHub at https://github.com/codepossible/csharp-parse-prefer-header.</Description>
+    <PackageProjectUrl>https://github.com/codepossible/csharp-parse-prefer-header</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/codepossible/csharp-parse-prefer-header</RepositoryUrl>
+    <PackageTags>rfc7240, prefer-header</PackageTags>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Company>Emjive Consulting LLC</Company>
+    <PackageId>Emjive.HttpPreferHeaderParser</PackageId>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <LangVersion>C# 8.0</LangVersion>    
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
+
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
 
 </Project>
