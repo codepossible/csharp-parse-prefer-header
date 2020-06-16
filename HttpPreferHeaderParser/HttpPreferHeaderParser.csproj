@@ -14,8 +14,7 @@ The C# code is hosted GitHub at https://github.com/codepossible/csharp-parse-pre
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Company>Emjive Consulting LLC</Company>
     <PackageId>Emjive.HttpPreferHeaderParser</PackageId>
-    <PackageLicenseFile>LICENSE</PackageLicenseFile>
-    <LangVersion>C# 8.0</LangVersion>    
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>    
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
