@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 
 namespace HttpPreferHeaderParser
 {
@@ -139,5 +141,97 @@ namespace HttpPreferHeaderParser
 
             return preference;
         }
+
+
+        /// <summary>
+        /// Serializes preference to string to be used in HTTP Preference Applied header
+        /// </summary>
+        /// <param name="preference">Preference object to convert</param>
+        /// <returns>A string contianing the header value</returns>
+        public string ConvertToHeaderValue(Preference preference)
+        {
+            string headerValue = null;
+
+            if (preference != null) 
+            {
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.Append(preference.Name);
+                stringBuilder.Append(NormalizeTokenValue(preference.Value));
+                
+
+                if (preference.Parameters.Count > 0)
+                {
+                    foreach (var parameterKey in preference.Parameters.Keys)
+                    {
+                        stringBuilder.Append($"; {parameterKey}");
+                        stringBuilder.Append(NormalizeTokenValue(preference.Parameters[parameterKey]));
+                    }
+                }
+
+                headerValue = stringBuilder.ToString();
+            }
+
+            return headerValue;
+        }
+
+
+        private string NormalizeTokenValue (string value)
+        {
+            string tokenizedValue;
+
+            if (string.IsNullOrEmpty(value))
+            {
+                return value;
+            }
+
+            if (value.Equals("true", StringComparison.InvariantCultureIgnoreCase))
+            {
+                tokenizedValue = string.Empty;
+            }
+            else
+            {
+                if (value.Contains(";")
+                    || value.Contains(",")
+                   )
+                {
+                    tokenizedValue = $"=\"{value}\"";
+                }
+                else
+                {
+                    tokenizedValue = $"={value}";
+                }
+            }
+
+            return tokenizedValue;
+
+        }
+
+        /// <summary>
+        /// Serializes a list of preferences to 
+        /// </summary>
+        /// <param name="preferences"></param>
+        /// <returns></returns>
+        public string ConvertToHeaderValue(List<Preference> preferences)
+        {
+            string headerValue = null;
+
+            if (preferences?.Count > 0)
+            {
+                List<string> headerValues = new List<string>();
+                foreach (var preference in preferences)
+                {
+                    if (preference != null)
+                    {
+                        headerValues.Add(ConvertToHeaderValue(preference));
+                    }
+                }
+
+                headerValue = string.Join(",", headerValues);
+            }
+
+            return headerValue;
+        }
+
+
     }
 }
