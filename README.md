@@ -69,6 +69,12 @@ var preferences = parser.parse("return=minimal; foo=\"some parameter\"");
   - Parses the array of string containing the contents of multiple Prefer Header
   - Returns a list of `Preference` class, if successfully processed.
   - `null`, if array is empty.
+- `string ConvertToHeaderValue(Preference preference)`
+  - Serializes `Preference` object into string to be used with `Preference-Applied` HTTP header
+  - Returns `null` if string is `null` or empty.
+- `string ConvertToHeaderValue(List<Preference> preference)`
+  - Serializes a list of preferences into a string to be used with `Preference-Applied` HTTP header
+  - Returns `null`, if list is `null` or `empty`
 
 ### Public class `Preference`
 

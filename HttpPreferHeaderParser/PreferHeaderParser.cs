@@ -144,10 +144,10 @@ namespace HttpPreferHeaderParser
 
 
         /// <summary>
-        /// Serializes preference to string to be used in HTTP Preference Applied header
+        ///  Serializes a preference to string to be used for Preference-Applied HTTP header
         /// </summary>
-        /// <param name="preference">Preference object to convert</param>
-        /// <returns>A string contianing the header value</returns>
+        /// <param name="preference">Preference to convert</param>
+        /// <returns>String containing the header value for the list of preferences or null, if preference is null</returns>
         public string ConvertToHeaderValue(Preference preference)
         {
             string headerValue = null;
@@ -174,8 +174,44 @@ namespace HttpPreferHeaderParser
             return headerValue;
         }
 
+        /// <summary>
+        /// Serializes a list of preferences to string to be used for Preference-Applied HTTP header
+        /// </summary>
+        /// <param name="preferences">List of Preferences to convert</param>
+        /// <returns>String containing the header value for the list of preferences or null, if list is null or empty</returns>
+        public string ConvertToHeaderValue(List<Preference> preferences)
+        {
+            string headerValue = null;
 
-        private string NormalizeTokenValue (string value)
+            if (preferences?.Count > 0)
+            {
+                List<string> headerValues = new List<string>();
+                foreach (var preference in preferences)
+                {
+                    if (preference != null)
+                    {
+                        headerValues.Add(ConvertToHeaderValue(preference));
+                    }
+                }
+
+                headerValue = string.Join(",", headerValues);
+            }
+
+            return headerValue;
+        }
+
+
+
+        /// <summary>
+        /// Helper method to convert preference and preference parameter values to its serialized version.
+        ///   - Returns empty string, if value is "true"
+        ///   - Adds "=" (equals sign) in front of values, if they are not set as "true"
+        ///   - Adds quotes to values that contain commas or semi-colons.
+        ///   - Null or empty string, the return value is null
+        /// </summary>
+        /// <param name="value">Value of preference or preference parameter</param>
+        /// <returns>Serialized version of the preference value or preference parameter value</returns>
+        private string NormalizeTokenValue(string value)
         {
             string tokenizedValue;
 
@@ -204,32 +240,6 @@ namespace HttpPreferHeaderParser
 
             return tokenizedValue;
 
-        }
-
-        /// <summary>
-        /// Serializes a list of preferences to 
-        /// </summary>
-        /// <param name="preferences"></param>
-        /// <returns></returns>
-        public string ConvertToHeaderValue(List<Preference> preferences)
-        {
-            string headerValue = null;
-
-            if (preferences?.Count > 0)
-            {
-                List<string> headerValues = new List<string>();
-                foreach (var preference in preferences)
-                {
-                    if (preference != null)
-                    {
-                        headerValues.Add(ConvertToHeaderValue(preference));
-                    }
-                }
-
-                headerValue = string.Join(",", headerValues);
-            }
-
-            return headerValue;
         }
 
 
